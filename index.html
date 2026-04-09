@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DevHub</title>
+
   <style>
     :root {
       --bg: #0d1117;
@@ -12,45 +13,71 @@
       --accent: #58a6ff;
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
+      overflow-x: hidden;
     }
 
     header {
       padding: 20px;
-      background: #010409;
+      background: rgba(1,4,9,0.8);
+      backdrop-filter: blur(10px);
       display: flex;
       justify-content: space-between;
       align-items: center;
       position: sticky;
       top: 0;
+      z-index: 1000;
+      animation: slideDown 0.8s ease;
     }
 
     nav a {
       margin: 0 10px;
       color: var(--text);
       text-decoration: none;
+      position: relative;
     }
 
-    nav a:hover {
-      color: var(--accent);
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s;
     }
+
+    nav a:hover::after { width: 100%; }
 
     .hero {
       text-align: center;
-      padding: 100px 20px;
+      padding: 120px 20px;
+      background: radial-gradient(circle at top, #1f2937, #0d1117);
       animation: fadeIn 1.5s ease;
     }
 
     .hero h1 {
       font-size: 3em;
+      animation: float 3s ease-in-out infinite;
     }
 
     .section {
-      padding: 50px 20px;
+      padding: 60px 20px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .grid {
@@ -63,11 +90,13 @@
       background: var(--card);
       padding: 20px;
       border-radius: 12px;
-      transition: transform 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     footer {
@@ -79,6 +108,16 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px);} 
       to { opacity: 1; transform: translateY(0);} 
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
   </style>
 </head>
@@ -103,7 +142,7 @@
 <section id="downloads" class="section">
   <h2>📦 Downloads</h2>
   <div class="grid">
-    <a href="https://github.com/Winner0283Tech/StartSite/index.html" class="card">📦 StartSite HTML Download</a>
+    <div class="card">Tool 1 Download</div>
     <div class="card">Tool 2 Download</div>
   </div>
 </section>
@@ -127,8 +166,8 @@
 <section id="community" class="section">
   <h2>💬 Community</h2>
   <p>Diskutiere mit anderen Entwicklern:</p>
-  
-<script src="https://giscus.app/client.js"
+
+  <script src="https://giscus.app/client.js"
         data-repo="Winner0283Tech/Winner0283Tech.github.io"
         data-repo-id="R_kgDORlSBLA"
         data-category="Q&A"
@@ -144,11 +183,25 @@
         async>
 </script>
 </section>
- 
 
 <footer>
   <p>© 2026 DevHub</p>
 </footer>
+
+<script>
+  // Scroll Animation
+  const sections = document.querySelectorAll('.section');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach(sec => observer.observe(sec));
+</script>
 
 </body>
 </html>
