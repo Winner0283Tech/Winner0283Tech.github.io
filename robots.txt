@@ -1,0 +1,8 @@
+# robots.txt für https://Winner0283Tech.github.io
+# Erlaubt allen Crawlern den Zugriff auf alle Inhalte
+
+User-agent: *
+Allow: /
+
+# Sitemap-Standort angeben (hilft Suchmaschinen beim Crawlen)
+Sitemap: https://Winner0283Tech.github.io/sitemap.xml
