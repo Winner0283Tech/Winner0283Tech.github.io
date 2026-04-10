@@ -1,13 +1,21 @@
 let editor;
+
+const API_URL = "https://winner0283tech-github-io.vercel.app/api/ai"; 
+// 🔥 WICHTIG: HIER deine echte Vercel URL eintragen
+
 let files = JSON.parse(localStorage.getItem("files")) || {
-  "main.js": "console.log('Hello VS Code Clone');"
+  "main.js": "console.log('Hello World');"
 };
 
 let currentFile = "main.js";
 
-/* Monaco Init */
+/* =========================
+   MONACO EDITOR INIT
+========================= */
 require.config({
-  paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs" }
+  paths: {
+    vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs"
+  }
 });
 
 require(["vs/editor/editor.main"], function () {
@@ -22,7 +30,10 @@ require(["vs/editor/editor.main"], function () {
   renderFiles();
 });
 
-/* FILE SYSTEM */
+/* =========================
+   FILE SYSTEM (SAVE/OPEN)
+========================= */
+
 function renderFiles() {
   const list = document.getElementById("fileList");
   list.innerHTML = "";
@@ -30,6 +41,8 @@ function renderFiles() {
   Object.keys(files).forEach(name => {
     const div = document.createElement("div");
     div.textContent = name;
+    div.style.cursor = "pointer";
+
     div.onclick = () => openFile(name);
     list.appendChild(div);
   });
@@ -59,7 +72,10 @@ function saveToStorage() {
   localStorage.setItem("files", JSON.stringify(files));
 }
 
-/* RUN */
+/* =========================
+   RUN CODE (HTML PREVIEW)
+========================= */
+
 function runCode() {
   const code = editor.getValue();
   const frame = document.getElementById("output");
@@ -67,7 +83,10 @@ function runCode() {
   frame.srcdoc = code;
 }
 
-/* LANGUAGE */
+/* =========================
+   LANGUAGE SWITCH
+========================= */
+
 document.addEventListener("change", (e) => {
   if (e.target.id === "language") {
     monaco.editor.setModelLanguage(editor.getModel(), e.target.value);
@@ -75,33 +94,42 @@ document.addEventListener("change", (e) => {
 });
 
 /* =========================
-   🤖 AI (SAFE VERSION)
-   ========================= */
+   🤖 AI ASSISTANT (FIXED)
+========================= */
 
 async function askAI() {
   const prompt = document.getElementById("prompt").value;
   const code = editor.getValue();
-
   const resBox = document.getElementById("aiResult");
 
-  resBox.textContent = "Thinking...";
-
-  // ❗ WICHTIG:
-  // KEIN API KEY im Frontend!
-  // Stattdessen Backend / Serverless Function nutzen.
+  resBox.textContent = "Thinking... 🤖";
 
   try {
-    const response = await fetch("https://winner0283tech-github-io.vercel.app/api/ai.js", {
+    const response = await fetch(API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, code })
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt,
+        code
+      })
     });
 
-    const data = await response.json();
-    resBox.textContent = data.result;
+    if (!response.ok) {
+      throw new Error("HTTP Error: " + response.status);
+    }
 
-  } catch (e) {
+    const data = await response.json();
+
+    console.log("AI Response:", data);
+
+    resBox.textContent = data.result || "Keine Antwort erhalten";
+
+  } catch (err) {
+    console.error("AI ERROR:", err);
+
     resBox.textContent =
-      "AI nicht verbunden. Du brauchst Backend (API Proxy).";
+      "❌ AI nicht verbunden. Check API URL oder Vercel Deploy.";
   }
 }
