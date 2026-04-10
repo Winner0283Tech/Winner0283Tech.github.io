@@ -1,81 +1,51 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Editor</title>
+<meta charset="UTF-8">
+<title>VS Code Web Clone</title>
 
-  <!-- Moderne Tech Font (System UI) -->
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont,
-                   "Segoe UI", Roboto, Arial, sans-serif;
-      background: #1e1e1e;
-      color: white;
-    }
-
-    nav {
-      height: 50px;
-      display: flex;
-      align-items: center;
-      padding: 0 15px;
-      background: #111;
-      border-bottom: 1px solid #333;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      margin-right: 15px;
-      font-weight: 500;
-    }
-
-    nav a:hover {
-      color: #00d4ff;
-    }
-
-    #container {
-      height: calc(100vh - 50px);
-      width: 100%;
-    }
-  </style>
-
-  <!-- Monaco Editor -->
-  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 </head>
 
 <body>
 
-  <!-- Navbar -->
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="editor.html">Editor</a>
-  </nav>
+<div class="layout">
 
-  <!-- Editor -->
-  <div id="container"></div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <button onclick="newFile()">+ New File</button>
+    <div id="fileList"></div>
+  </div>
 
-  <script>
-    require.config({
-      paths: {
-        vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs"
-      }
-    });
+  <!-- MAIN -->
+  <div class="main">
 
-    require(["vs/editor/editor.main"], function () {
-      monaco.editor.create(document.getElementById("container"), {
-        value: `// Willkommen im Editor 🚀
-function hello() {
-  console.log("Hello World");
-}
+    <div class="topbar">
+      <button onclick="saveFile()">💾 Save</button>
+      <button onclick="runCode()">▶ Run</button>
+      <select id="language">
+        <option value="javascript">JS</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+      </select>
+    </div>
 
-hello();`,
-        language: "javascript",
-        theme: "vs-dark",
-        automaticLayout: true
-      });
-    });
-  </script>
+    <div id="editor"></div>
+    <iframe id="output"></iframe>
 
+  </div>
+
+  <!-- AI PANEL -->
+  <div class="ai">
+    <h3>AI Assistant 🤖</h3>
+    <textarea id="prompt"></textarea>
+    <button onclick="askAI()">Ask</button>
+    <div id="aiResult"></div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
