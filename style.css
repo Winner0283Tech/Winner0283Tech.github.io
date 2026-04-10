@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  font-family: system-ui;
+  background: #1e1e1e;
+  color: white;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background: #111;
+  padding: 10px;
+  border-right: 1px solid #333;
+}
+
+.sidebar button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  height: 40px;
+  background: #111;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #333;
+}
+
+#editor {
+  flex: 1;
+}
+
+#output {
+  height: 150px;
+  background: white;
+}
+
+/* AI */
+.ai {
+  width: 250px;
+  background: #111;
+  border-left: 1px solid #333;
+  padding: 10px;
+}
+
+textarea {
+  width: 100%;
+  height: 80px;
+}
