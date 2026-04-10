@@ -1,7 +1,7 @@
 let editor;
 
-const API_URL = "https://https://winner0283tech-github-eujjadftv-winner0283techs-projects.vercel.app/api/ai"; 
-// 🔥 WICHTIG: HIER deine echte Vercel URL eintragen
+const API_URL = "https://winner0283tech-github-eujjadftv-winner0283techs-projects.vercel.app/api/ai";
+// 🔥 WICHTIG: Das ist deine echte Vercel API URL
 
 let files = JSON.parse(localStorage.getItem("files")) || {
   "main.js": "console.log('Hello World');"
@@ -31,7 +31,7 @@ require(["vs/editor/editor.main"], function () {
 });
 
 /* =========================
-   FILE SYSTEM (SAVE/OPEN)
+   FILE SYSTEM
 ========================= */
 
 function renderFiles() {
@@ -102,7 +102,9 @@ async function askAI() {
   const code = editor.getValue();
   const resBox = document.getElementById("aiResult");
 
-  resBox.textContent = "Thinking... 🤖";
+  console.log("Using API:", API_URL);
+
+  resBox.textContent = "Connecting to AI... 🤖";
 
   try {
     const response = await fetch(API_URL, {
@@ -122,14 +124,14 @@ async function askAI() {
 
     const data = await response.json();
 
-    console.log("AI Response:", data);
+    console.log("AI RESPONSE:", data);
 
-    resBox.textContent = data.result || "Keine Antwort erhalten";
+    resBox.textContent = data.result || "No response from AI";
 
   } catch (err) {
     console.error("AI ERROR:", err);
 
     resBox.textContent =
-      "❌ AI nicht verbunden. Check API URL oder Vercel Deploy.";
+      "❌ API not connected. Check Vercel deployment or URL.";
   }
 }
